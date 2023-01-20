@@ -74,17 +74,12 @@ def rfImput_unsupvd(x, iter =10):
   x_roughfix= na_roughfix(x)
   rf_imput = x.copy()
   while iter:
-    # print("--------------------------------------")
-    # print("we have still {} iteration left".format(iter))
+    
     df=define_matrix(x_roughfix)
     X,y =df.iloc[:,0:127],df.iloc[:,127]
     clf = RandomForestClassifier(max_depth=2, random_state=0)
     clf.fit(X, y)
     x_prox=proximityMatrix(clf, X.iloc[range(x.shape[0]),:], normalize=True)
-
-    # print("x shape is", x.shape )
-    # print("x_prox shape is", x.shape )
-    # print("x_roughfix shape is", x_roughfix.shape)
 
     for i in range(rf_imput.shape[1]):
        # print("we are at column nbr",i)
@@ -129,10 +124,6 @@ def na_fix(na_values, rough_values, x_prox):
   replaced_values= rough_values
   for i in range(len(na_list)):
     j = na_list[i]
-    # print("--------------------------------------")
-    # print("so j = ", j, "and we have that x_prox has the shape",pd.DataFrame(x_prox).shape )
-    # print("--------------------------------------")
-
     pd.DataFrame(x_prox).iloc[j,j] = 0 # imputed datum itself
     replaced_values[j]= k_Weighted_mean(rough_values, pd.DataFrame(x_prox).iloc[:,j])
 
